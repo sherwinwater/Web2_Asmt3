@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 20px;
+    }
+
+    .grid-container,
+    .color {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      padding: 5px;
+    }
+
+    .grid-item,
+    .grid-color {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      font-size: 30px;
+      text-align: center;
+    }
+
+    .grid-color {
+      cursor: pointer;
+    }
+
+    #restart {
+      margin: auto;
+      display: block;
+      font-size: 1.3em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grid-container" id="table"></div>
+  <div>pick one color</div>
+  <div class="color" id="color-pane"> </div>
+  <button id="restart" onclick="restartGame()">restart</button>
+  <div id="hint"></div>
+
+  <script>
+    var color_pick;
+    var grid_color = document.getElementsByClassName("grid-color");
+    var grid_item = document.getElementsByClassName('grid-item');
+    var table = document.getElementById('table');
+    var color_pane = document.getElementById('color-pane');
+    var hint = document.getElementById('hint');
+
+    var color_list = ["white", "silver", "gray", "black", "red", "maroon", "yellow", "olive", "lime", "green",
+      "aqua", "cyan", "teal", "blue", "navy", "violet", "fuchsia", "purple",
+    ];
+    // create 10*10 table
+    window.addEventListener('load', getTable);
+
+    function getTable() {
+      var table_number = 100;
+      for (var i = 0; i < table_number; i++) {
+        table.innerHTML += ` <div class="grid-item">
+          </div>`;
+      }
+    }
+
+    // create color pick pane
+    window.addEventListener('load', loadColorPane);
+    function loadColorPane() {
+      for (let i = 0; i < color_list.length; i++) {
+        color_pane.innerHTML += ` <div id=${color_list[i]} class="grid-color"></div>`;
+        grid_color[i].style.backgroundColor = grid_color[i].id;
+      }
+    }
+
+    // pick a color
+    window.addEventListener('load', pickColor);
+    function pickColor() {
+      for (let i = 0; i < grid_color.length; i++) {
+        grid_color[i].addEventListener('click', function () {
+          color_pick = this.id;
+        })
+      }
+    }
+
+    // change the color
+    window.addEventListener('load', changeColor);
+    function changeColor() {
+      for (let i = 0; i < grid_item.length; i++) {
+        grid_item[i].addEventListener('mouseover', function () {
+          if (this.style.backgroundColor === "") {
+            this.style.backgroundColor = color_pick;
+          }
+        })
+      }
+    }
+
+    // restart the game
+    function restartGame() {
+      for (let i = 0; i < grid_item.length; i++) {
+        grid_item[i].style.backgroundColor = "";
+      }
+    }
+
+    // get hint
+    window.addEventListener('load', getHint);
+
+    function getHint() {
+      for (let i = 0; i < grid_color.length; i++) {
+        grid_color[i].addEventListener('mouseenter', function () {
+          hint.innerHTML = this.id;
+        })
+        grid_color[i].addEventListener('mouseleave', function () {
+          hint.innerHTML = "";
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>

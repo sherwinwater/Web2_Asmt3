@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Assignment3</title>
+  <style>
+    body {
+      text-align: center;
+    }
+
+    .color {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      padding: 5px;
+      margin-left: 25%;
+      margin-right: 25%;
+    }
+
+    #table {
+      margin: auto;
+    }
+
+    .item,
+    .grid-color {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      padding: 10px;
+    }
+
+    .grid-color {
+      cursor: pointer;
+    }
+
+    #restart {
+      margin: auto;
+      display: block;
+      background-color: TEAL;
+      color: white;
+      border-radius: 15px;
+    }
+
+    #hint {
+      font-style: italic;
+      color: purple;
+      margin-top: 10px;
+    }
+
+    #color_pane_title {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="table"></table>
+  <div id="color_pane_title">PICK ONE COLOR & PAINT</div>
+  <div class="color" id="color-pane"> </div>
+  <button id="restart" onclick="restartGame()">restart</button>
+  <div id="hint"></div>
+
+  <script>
+    var color_pick;
+    var grid_color = document.getElementsByClassName("grid-color");
+    var item = document.getElementsByClassName('item');
+    var table = document.getElementById('table');
+    var table_row = document.getElementsByClassName('table-row');
+
+    var color_pane = document.getElementById('color-pane');
+    var hint = document.getElementById('hint');
+
+    var color_list = ["white", "silver", "gray", "black", "red", "maroon", "yellow", "olive", "lime", "green",
+      "aqua", "teal", "blue", "navy", "fuchsia", "purple",
+    ];
+
+
+    // create a table
+    window.addEventListener('load', getTable);
+
+    function getTable() {
+      var table_column_num = 30;
+      var table_row_num = 20;
+      for (var i = 0; i < table_row_num; i++) {
+        table.innerHTML += `<tr class="table-row"> </tr>`;
+        for (var j = 0; j < table_column_num; j++) {
+          table_row[i].innerHTML += ` <td class="item"> </td>`;
+        }
+      }
+    }
+
+    // create color pick pane
+    window.addEventListener('load', loadColorPane);
+
+    function loadColorPane() {
+      for (let i = 0; i < color_list.length; i++) {
+        color_pane.innerHTML += ` <div id=${color_list[i]} class="grid-color"></div>`;
+        grid_color[i].style.backgroundColor = grid_color[i].id;
+      }
+    }
+
+    // pick a color
+    window.addEventListener('load', pickColor);
+
+    function pickColor() {
+      for (let i = 0; i < grid_color.length; i++) {
+        grid_color[i].addEventListener('click', function () {
+          color_pick = this.id;
+        })
+      }
+    }
+
+    // change the color
+    window.addEventListener('load', changeColor);
+
+    function changeColor() {
+      for (let i = 0; i < item.length; i++) {
+        item[i].addEventListener('mouseover', function () {
+          if (this.style.backgroundColor === "") {
+            this.style.backgroundColor = color_pick;
+          }
+        })
+      }
+    }
+
+    // restart the game
+    function restartGame() {
+      for (let i = 0; i < item.length; i++) {
+        item[i].style.backgroundColor = "";
+        color_pick = "";
+      }
+    }
+
+    // get hint
+    window.addEventListener('load', getHint);
+
+    function getHint() {
+      for (let i = 0; i < grid_color.length; i++) {
+        grid_color[i].addEventListener('mouseenter', function () {
+          hint.innerHTML = this.id;
+        })
+        grid_color[i].addEventListener('mouseleave', function () {
+          hint.innerHTML = "";
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>
